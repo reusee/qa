@@ -10,3 +10,7 @@ var (
 	ce, he = e4.Check, e4.Handle
 	pt     = fmt.Printf
 )
+
+type (
+	any = interface{}
+)
