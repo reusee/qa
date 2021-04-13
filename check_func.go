@@ -3,16 +3,18 @@ package qa
 import (
 	"reflect"
 	"runtime"
+	"sync"
 
 	"github.com/reusee/dscope"
 )
 
-type CheckFunc func()
+type CheckFunc func() []error
 
 var _ dscope.Reducer = CheckFunc(nil)
 
 func (_ CheckFunc) Reduce(_ dscope.Scope, vs []reflect.Value) reflect.Value {
-	fn := func() {
+	fn := CheckFunc(func() (ret []error) {
+		var l sync.Mutex
 		sem := make(chan struct{}, runtime.NumCPU())
 		for _, v := range vs {
 			fn := v.Interface().(CheckFunc)
@@ -24,16 +26,22 @@ func (_ CheckFunc) Reduce(_ dscope.Scope, vs []reflect.Value) reflect.Value {
 				defer func() {
 					<-sem
 				}()
-				fn()
+				errs := fn()
+				l.Lock()
+				ret = append(ret, errs...)
+				l.Unlock()
 			}()
 		}
 		for i := 0; i < cap(sem); i++ {
 			sem <- struct{}{}
 		}
-	}
-	return reflect.ValueOf(CheckFunc(fn))
+		return
+	})
+	return reflect.ValueOf(fn)
 }
 
 func (_ Def) CheckFunc() CheckFunc {
-	return func() {}
+	return func() []error {
+		return nil
+	}
 }
