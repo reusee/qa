@@ -10,7 +10,7 @@ func Run(
 	for _, obj := range defObjects {
 		defs = append(defs, dscope.Methods(obj)...)
 	}
-	dscope.New(defs...).Sub(
+	dscope.New(defs...).Fork(
 		func() Args {
 			return []string{pkg}
 		},
