@@ -10,7 +10,7 @@ import (
 func TestPkgs(t *testing.T) {
 	dscope.New(
 		dscope.Methods(new(Def))...,
-	).Sub(func() Args {
+	).Fork(func() Args {
 		return []string{"."}
 	}).Call(func(
 		pkgs []*packages.Package,

@@ -10,7 +10,7 @@ import (
 
 type CheckFunc func() []error
 
-var _ dscope.Reducer = CheckFunc(nil)
+var _ dscope.CustomReducer = CheckFunc(nil)
 
 func (_ CheckFunc) Reduce(_ dscope.Scope, vs []reflect.Value) reflect.Value {
 	fn := CheckFunc(func() (ret []error) {

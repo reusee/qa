@@ -11,7 +11,7 @@ func TestCheckFunc(t *testing.T) {
 	ok := false
 	dscope.New(
 		dscope.Methods(new(Def))...,
-	).Sub(func() Args {
+	).Fork(func() Args {
 		return []string{"."}
 	}, func() CheckFunc {
 		return func() []error {

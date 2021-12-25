@@ -21,7 +21,7 @@ import (
 func TestAnalysis(t *testing.T) {
 	dscope.New(
 		dscope.Methods(new(Def))...,
-	).Sub(AnalyzersToDefs([]*analysis.Analyzer{
+	).Fork(AnalyzersToDefs([]*analysis.Analyzer{
 		atomic.Analyzer,
 		atomicalign.Analyzer,
 		bools.Analyzer,
@@ -33,7 +33,7 @@ func TestAnalysis(t *testing.T) {
 		testinggoroutine.Analyzer,
 		unreachable.Analyzer,
 		unsafeptr.Analyzer,
-	})...).Sub(func() Args {
+	})...).Fork(func() Args {
 		return Args{"."}
 	}).Call(func(
 		check CheckFunc,
