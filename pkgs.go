@@ -3,7 +3,7 @@ package qa
 import (
 	"fmt"
 
-	"github.com/reusee/e4"
+	"github.com/reusee/e5"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -19,7 +19,7 @@ func (_ Def) Packages(
 	)
 	ce(err)
 	if packages.PrintErrors(pkgs) > 0 {
-		e4.Throw(fmt.Errorf("package load error"))
+		e5.Throw(fmt.Errorf("package load error"))
 	}
 	return pkgs
 }
